@@ -5,6 +5,7 @@ import { strict as assert } from 'assert';
 
 import { Browser, CDPSession, Page, Target, WebWorker } from 'puppeteer';
 import { PuppeteerExtra } from 'puppeteer-extra';
+import { intercept, patterns } from 'puppeteer-interceptor';
 
 import { UserAgentHelper } from './UserAgentHelper';
 import { PptrToolkit } from './PptrToolkit';
@@ -266,6 +267,21 @@ export class FakeBrowser {
                 password: this.driverParams.proxy.password,
             })
         }
+
+        // intercept headers field content-security-policy
+        // @ts-ignore
+        intercept(page, patterns.All('*'), {
+            onResponseReceived: event => {
+                for (let header of event?.response?.headers ?? []) {
+                    if (header?.name !== 'content-security-policy') continue;
+                    header.value += ` script-src http://localhost:${kInternalHttpServerPort};`;
+                    header.value += ` script-src http://127.0.0.1:${kInternalHttpServerPort};`;
+                    header.value += ` worker-src http://localhost:${kInternalHttpServerPort} http://127.0.0.1:${kInternalHttpServerPort};`;
+                    console.log(`Added http://localhost:${kInternalHttpServerPort} to content-security-policy`);
+                }
+                return event.response;
+            }
+        });        
 
         // cdp
         try {

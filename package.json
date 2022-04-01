@@ -53,6 +53,7 @@
     "puppeteer-extra": "*",
     "puppeteer-extra-plugin": "*",
     "puppeteer-extra-plugin-user-preferences": "*",
+    "puppeteer-interceptor": "^2.2.0",
     "url-toolkit": "*"
   },
   "peerDependencies": {
