@@ -133,6 +133,7 @@ export const kDefaultLaunchArgs = [
 // friend class BrowserLauncher
 export class FakeBrowser {
     static Builder = BrowserBuilder
+    static Launcher = BrowserLauncher
 
     static readonly globalConfig = {
         defaultBrowserMaxSurvivalTime: kBrowserMaxSurvivalTime,

@@ -268,6 +268,13 @@ export class BrowserLauncher {
         }
     }
 
+    public static shutdown() {
+        if (this._checkerIntervalId) {
+            clearInterval(this._checkerIntervalId);
+            this._checkerIntervalId = null;
+        }
+    }
+
     static getBrowserWithUUID(uuid: string): FakeBrowser | undefined {
         return this._fakeBrowserInstances.find(e => e.uuid === uuid)
     }
